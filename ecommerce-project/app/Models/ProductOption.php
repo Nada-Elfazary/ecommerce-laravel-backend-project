@@ -7,7 +7,4 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ProductOption extends Pivot {
     public $incrementing = true;
 
-    
-
-
 }

@@ -20,19 +20,25 @@ class ProductController extends Controller
             $products = 0;
         }
         
-        $products = QueryBuilder::for(Variant::class)
-            ->allowedFilters([
-                AllowedFilter::custom('average_rating', new FiltersProductRatings),
-                AllowedFilter::custom('options', new FiltersProductOptions),
-                AllowedFilter::scope('max_price'),
-            ])
-            ->get();
+        try {
+            $products = QueryBuilder::for(Variant::class)
+                ->allowedFilters([
+                    AllowedFilter::custom('average_rating', new FiltersProductRatings),
+                    AllowedFilter::custom('options', new FiltersProductOptions),
+                    AllowedFilter::scope('max_price'),
+                ])
+                ->get();
         
-       
-        
+            return response()->json([
+                'products' => $products,
+            ]);
 
-        echo "products: {$products}";
-
+        } catch(\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ], 500);
+        }
     }
 
     
