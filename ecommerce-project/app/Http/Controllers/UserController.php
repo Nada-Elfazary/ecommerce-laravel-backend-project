@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use DB;
 
 class UserController extends Controller
 {
@@ -22,7 +24,7 @@ class UserController extends Controller
     ];
 
     public function show() {
-        $user = User::find(1)->first(); //hardcoded for now, later Auth::user()
+        $user = Auth::user(); //hardcoded for now, later Auth::user()
 
         return response()->json([
             'name' => $user->name,
@@ -31,9 +33,9 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit() {
-        $user = User::find(1)->first(); //hardcoded for now, later Auth::user()
-
+    public function edit(Response $response) {
+        $user = Auth::user(); //hardcoded for now, later Auth::user()
+        $affected = DB::table('users')->where('id', $user->id)->update(['name' => $response->name]);
         return response()->json([
             'name' => $user->name,
             'email' => $user->email,

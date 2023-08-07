@@ -20,8 +20,13 @@ Route::get('/', function () {
     return ['Laravel' => app()->version()];
 });
 
+Auth::routes([
+    'verify' => true,
+]);
+
+
 Route::middleware(['auth:sanctum'])->group(function() {
-    Route::get('/orders', [OrderController::class, 'index']);
+    Route::get('/orders', [OrderController::class, 'index'])->middleware('verified');
 
     Route::get('/profile', [UserController::class, 'show']);
     Route::post('/profile', [UserController::class, 'edit']);
