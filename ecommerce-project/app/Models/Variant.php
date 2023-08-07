@@ -18,16 +18,38 @@ class Variant extends Model
         return $query->where('price', '<=', $price);
     }
 
-    public function scopeAverageRating(Builder $query, $rating): Builder
+    public function scopeAverageRating(Builder $query, ...$ratings): Builder
     {
         
-        return $query->whereExists(function ($query) {
+        return $query->whereExists(function ($query) use($ratings) {
             $query->select(DB::raw(1))
                 ->from('products')
-                ->where('average_rating', '=', 10);
-        })->get();
+                ->whereColumn('products.id', 'variants.product_id')
+                ->whereIn('average_rating', $ratings);
+        });
+
     }   
 
+    public function scopeOptions(Builder $query, ...$options) {
+
+        foreach ($options as $option) {
+            $variants =  explode('/', $option);
+
+            if(sizeof($variants) > 0) {
+                $options_info[] = $variants;
+            }
+        }
+
+        foreach($options_info as $option) {
+            
+            $query->where(function($query) use($option) {
+                $query->whereIn('option1', $option)
+                ->orWhereIn('option2', $option);
+            });
+        }
+        return $query;
+
+    }
     public function product() {
         return $this->belongsTo(Product::class);
     }

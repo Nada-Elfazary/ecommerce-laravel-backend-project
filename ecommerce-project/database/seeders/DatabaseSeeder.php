@@ -8,6 +8,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Variant;
 use App\Models\Product;
+use App\Models\Order;
 
 class DatabaseSeeder extends Seeder
 {
@@ -70,6 +71,12 @@ class DatabaseSeeder extends Seeder
             'option1' => 'casual',
             'option2' => 'medium',
 
+        ]);
+
+        $user = User::find(1)->first();
+        
+        Order::factory()->create([
+            'user_id' => $user->id,
         ]);
 
         // \App\Models\User::factory()->create([
