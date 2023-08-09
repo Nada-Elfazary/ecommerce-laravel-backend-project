@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('option2');
             $table->double('price');
             $table->integer('stock');
-            $table->boolean('is_in_stock')->default(true);
             $table->timestamps();
         });
     }

@@ -33,13 +33,26 @@ class UserController extends Controller
         ]);
     }
 
-    public function edit(Response $response) {
+    public function update(Request $request) {
         $user = Auth::user(); //hardcoded for now, later Auth::user()
-        $affected = DB::table('users')->where('id', $user->id)->update(['name' => $response->name]);
+        echo $user->id;
+        if($request->name == null){
+            $request['name'] =  $user->name;
+        }
+
+        if($request->email == null){
+            $request['email'] =  $user->email;
+        }
+
+        $affected = DB::table('users')->where('id', $user->id)->update([
+            'name' => $request->name,
+            'email' => $request->email
+        ]);
+        $user = User::where('id', $user->id)->get()->first();
+      //  echo $affected;
         return response()->json([
             'name' => $user->name,
             'email' => $user->email,
-
         ]);
     }
 

@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Variant;
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Option;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,9 +35,20 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
+        $options = Option::factory(2)->create();
         $product = Product::factory()->create([
             'average_rating'=>5,
         ]);
+       
+        $product->options()->attach($options[0]->id,[
+            'option_idx' => 0,
+        ]);
+
+        $product->options()->attach($options[1]->id,[
+            'option_idx' => 1,
+        ]);
+        
+
         $product2 = Product::factory()->create([
             'average_rating'=>2,
         ]);
@@ -58,6 +70,16 @@ class DatabaseSeeder extends Seeder
             'option1' => 'formal',
             'option2' => 'white',
             'price' => 70,
+
+        ]);
+
+        Variant::factory()->create([
+            'title' => 'short',
+            'skuid' => 'uiuyf759yw',
+            'product_id' => $product2->id,
+            'option1' => 'formal',
+            'option2' => 'white',
+            'price' => 20,
 
         ]);
 

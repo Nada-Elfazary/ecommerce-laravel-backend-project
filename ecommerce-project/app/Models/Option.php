@@ -16,7 +16,7 @@ class Option extends Model
     ];
 
     public function products() {
-        return $this->belongsToMany(Product::class, 'product_specs', 'option', 'product')
+        return $this->belongsToMany(Product::class, 'product_specs')
         ->as('details')->withPivot('option_idx');
     }
 }

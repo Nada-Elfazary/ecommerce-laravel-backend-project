@@ -25,14 +25,7 @@ Auth::routes([
 ]);
 
 
-Route::middleware(['auth:sanctum'])->group(function() {
-    Route::get('/orders', [OrderController::class, 'index'])->middleware('verified');
 
-    Route::get('/profile', [UserController::class, 'show']);
-    Route::post('/profile', [UserController::class, 'edit']);
-});
-
-Route::get('/products', [ProductController::class, 'index']);
 
 
 

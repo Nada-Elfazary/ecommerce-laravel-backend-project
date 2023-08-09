@@ -25,7 +25,6 @@ class ProductFactory extends Factory
     {
         return [
             'title' => fake()->sentence(),
-            'options'=> ['size', 'color'],
         ];
     }
 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use DB;
 
 class Product extends Model
 {
@@ -13,21 +15,65 @@ class Product extends Model
         'options' => 'array'
     ];
 
-    public function scopeOptions(Builder $query, $options): Builder
+    public function scopeMaxPrice(Builder $query, $price): Builder
     {
-        return $query->where('option1', '=', $options[0])
-        ->where('option2', '=', $options[1]);
+        return $query->selectRaw('id, title,
+        average_rating')->whereExists(function ($query) use($price) {
+            $query->selectRaw(DB::raw(1))
+                ->from('variants')
+                ->whereColumn('variants.product_id', 'products.id')
+                ->where('price', '<=', $price);
+        });
+
     }
 
-   
+    public function scopeAverageRating(Builder $query, ...$ratings): Builder
+    {
+        
+        return $query->selectRaw('id, title, 
+        average_rating')->whereIn('average_rating', $ratings);
+      
 
+    }   
+
+    public function scopeOptions(Builder $query, ...$options) {
+
+        foreach ($options as $option) {
+            $variants =  explode('/', $option);
+
+            if(sizeof($variants) > 0) {
+                $options_info[] = $variants;
+            }
+        }
+
+        $query->selectRaw('id, title, 
+            average_rating')->whereExists(function($query) use($option, $options) {
+                foreach($options as $option) {
+                    $variants =  explode('/', $option);
+             
+                    $query->select()->from('variants')
+                    ->whereColumn('variants.product_id', 'products.id')->whereExists(function($query) use($option, $variants) { 
+                        $query->whereIn('option1', $variants)
+                        ->orWhereIn('option2', $variants);
+                    });
+                }
+            });
+        
+        return $query;
+
+    }
+
+    
 
     public function variants() {
         return $this->hasMany(Variant::class);
     }
 
     public function options() {
-        return $this->belongsToMany(Option::class, 'product_specs', 'product', 'option')
-        ->as('details')->withPivot('option_idx');
+        return $this->belongsToMany(Option::class, 'product_specs')->withPivot('option_idx');
+    }
+
+    public function owner() {
+        return $this->belongsToMany(User::class, 'wishlists');
     }
 }

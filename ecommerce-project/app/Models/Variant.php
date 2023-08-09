@@ -4,8 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
-use DB;
 
 class Variant extends Model
 {
@@ -21,8 +19,10 @@ class Variant extends Model
     public function scopeAverageRating(Builder $query, ...$ratings): Builder
     {
         
-        return $query->whereExists(function ($query) use($ratings) {
-            $query->select(DB::raw(1))
+        return $query->selectRaw('id, product_id, title, skuid, 
+        option1 as first_property, option2 as second_property,
+        price, stock, is_in_stock')->whereExists(function ($query) use($ratings) {
+            $query->selectRaw(DB::raw(1))
                 ->from('products')
                 ->whereColumn('products.id', 'variants.product_id')
                 ->whereIn('average_rating', $ratings);
@@ -42,7 +42,9 @@ class Variant extends Model
 
         foreach($options_info as $option) {
             
-            $query->where(function($query) use($option) {
+            $query->selectRaw('id, product_id, title, skuid, 
+            option1 as first_property, option2 as second_property,
+            price, stock, is_in_stock')->where(function($query) use($option) {
                 $query->whereIn('option1', $option)
                 ->orWhereIn('option2', $option);
             });
@@ -55,13 +57,13 @@ class Variant extends Model
     }
 
     public function orders() {
-        return $this->belongsToMany(Order::class, 'order_contents', 'order', 'variant')
+        return $this->belongsToMany(Order::class, 'order_contents')
         ->as('content');
     }
 
-    public function options() {
+    /*public function options() {
         return $this->belongsToMany(Option::class);
-    }
+    }*/
 
 
 
