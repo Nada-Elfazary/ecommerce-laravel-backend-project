@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Http\Resources\VariantResource;
 use DB;
 
 class Product extends Model
@@ -76,4 +77,15 @@ class Product extends Model
     public function owner() {
         return $this->belongsToMany(User::class, 'wishlists');
     }
+
+    public function defaultVariant($product_id) {
+        $default_variant = Variant::where('product_id','=', $product_id)->orderBy('price', 'asc')->first();
+        return new VariantResource($default_variant);
+    }
+
+    public function inStock($variants) {
+        echo $variants;
+        echo "DONEEEE";
+    }
+
 }

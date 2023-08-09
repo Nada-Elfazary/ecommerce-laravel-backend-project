@@ -38,12 +38,12 @@ class ProductController extends Controller
 
             }
 
-            //return new ProductResource($products);
+            return ProductResource::collection($products);
 
-            
+            /*
             return response()->json([
                 'products' => $products,
-            ]);
+            ]);*/
 
         } catch(\Throwable $th) {
             return response()->json([

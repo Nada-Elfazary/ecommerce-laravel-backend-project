@@ -61,9 +61,13 @@ class Variant extends Model
         ->as('content');
     }
 
-    /*public function options() {
-        return $this->belongsToMany(Option::class);
-    }*/
+    public function inStock($stock) {
+        if($stock == 0) {
+            return False;
+        } else{
+            return True;
+        }
+    }
 
 
 
