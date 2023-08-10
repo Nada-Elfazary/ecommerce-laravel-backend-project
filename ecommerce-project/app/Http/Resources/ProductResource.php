@@ -22,7 +22,7 @@ class ProductResource extends JsonResource
             'average rating' => $this->average_rating,
             'options' => OptionResource::collection($this->options()->get()),
             'default variant' => $this->defaultVariant($this->id),
-           // 'is_in_stock' => $this->inStock($this->variants),
+            'is_in_stock' => $this->inStock($this->variants),
         ];
     }
 }

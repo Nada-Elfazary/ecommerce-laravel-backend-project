@@ -23,12 +23,13 @@ class ProductController extends Controller
         
         try {
             if (sizeof($_REQUEST) == 0) {
-                $products = Product::with('options')->selectRaw('id, title, 
-                average_rating')->get();
+                $products = Product::with('options', 'variants')
+                ->selectRaw('id, title, average_rating')->get();
+
             }
             else{
                 $products = QueryBuilder::for(Product::class)
-                    ->with(['options'])
+                    ->with(['options', 'variants'])
                     ->allowedFilters([
                         AllowedFilter::scope('average_rating'),
                         AllowedFilter::scope('options'),
@@ -37,6 +38,7 @@ class ProductController extends Controller
                     ->get();
 
             }
+
 
             return ProductResource::collection($products);
 

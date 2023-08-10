@@ -23,6 +23,7 @@ class VariantResource extends JsonResource
             'price' => $this->price,
             'stock' => $this->stock,
             'is_in_stock' => $this->inStock($this->stock),
+            //add quantity and price conditionally (with order)
          
         ];
     }

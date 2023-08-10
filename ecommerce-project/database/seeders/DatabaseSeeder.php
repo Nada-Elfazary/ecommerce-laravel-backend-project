@@ -53,6 +53,9 @@ class DatabaseSeeder extends Seeder
             'average_rating'=>2,
         ]);
 
+        $user = User::find(1)->first();
+        $user->favorites()->attach([$product->id, $product2->id]);
+
         Variant::factory()->create([
             'title' => 'short',
             'product_id' => $product->id,

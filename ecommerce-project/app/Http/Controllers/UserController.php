@@ -24,23 +24,24 @@ class UserController extends Controller
     ];
 
     public function show() {
-        $user = Auth::user(); //hardcoded for now, later Auth::user()
+        $user = Auth::user(); 
 
         return response()->json([
             'name' => $user->name,
             'email' => $user->email,
-
         ]);
     }
 
     public function update(Request $request) {
         $user = Auth::user(); //hardcoded for now, later Auth::user()
-        echo $user->id;
+        //echo $request;
         if($request->name == null){
+            echo 'name null';
             $request['name'] =  $user->name;
         }
 
         if($request->email == null){
+            echo 'thought email null';
             $request['email'] =  $user->email;
         }
 
@@ -49,7 +50,7 @@ class UserController extends Controller
             'email' => $request->email
         ]);
         $user = User::where('id', $user->id)->get()->first();
-      //  echo $affected;
+        echo $affected;
         return response()->json([
             'name' => $user->name,
             'email' => $user->email,

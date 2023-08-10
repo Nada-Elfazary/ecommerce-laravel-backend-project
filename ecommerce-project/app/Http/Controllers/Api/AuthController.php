@@ -35,9 +35,8 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
-            echo $user;
 
-            Auth::login($user); //right?
+            $this->logIn($request); //right?
 
             return response()->json([
                 'status' => true,

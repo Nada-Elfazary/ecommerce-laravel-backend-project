@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,9 +27,9 @@ Auth::routes([
     'verify' => true,
 ]);
 
-Route::post('/signup', [AuthController::class, 'signUp']);
+Route::post('/signup', [AuthController::class, 'signUp'])->middleware('guest');
 
-Route::post('/login', [AuthController::class, 'logIn']);
+Route::post('/login', [AuthController::class, 'logIn'])->middleware('guest');
 
 Route::middleware(['auth:sanctum'])->post('/logout', [AuthController::class, 'logOut']);
 
@@ -39,8 +40,8 @@ Route::middleware(['auth:sanctum'])->group(function() {
     Route::patch('/profile', [UserController::class, 'update']);
 
     Route::get('/favorites', [WishlistController::class, 'index']);
-    Route::post('/add-favorite/{product}', [WishlistController::class, 'create']);
-    Route::delete('/remove-favorite/{product}', [WishlistController::class, 'destroy']);
+    Route::post('/favorites/add/{product}', [WishlistController::class, 'create']);
+    Route::delete('/favorites/remove/{product}', [WishlistController::class, 'destroy']);
 });
 
 Route::get('/products', [ProductController::class, 'index']);

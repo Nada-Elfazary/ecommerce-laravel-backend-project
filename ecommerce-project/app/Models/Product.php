@@ -16,6 +16,8 @@ class Product extends Model
         'options' => 'array'
     ];
 
+    protected $guarded = [];
+
     public function scopeMaxPrice(Builder $query, $price): Builder
     {
         return $query->selectRaw('id, title,
@@ -30,28 +32,24 @@ class Product extends Model
 
     public function scopeAverageRating(Builder $query, ...$ratings): Builder
     {
-        
         return $query->selectRaw('id, title, 
         average_rating')->whereIn('average_rating', $ratings);
-      
-
     }   
 
+    // function takes in options (array with each element
+    //representing as different type of option)
     public function scopeOptions(Builder $query, ...$options) {
 
-        foreach ($options as $option) {
-            $variants =  explode('/', $option);
-
-            if(sizeof($variants) > 0) {
-                $options_info[] = $variants;
-            }
-        }
-
         $query->selectRaw('id, title, 
-            average_rating')->whereExists(function($query) use($option, $options) {
+            average_rating')->whereExists(function($query) use($options) {
                 foreach($options as $option) {
+
+                    //variants: the different instances per option 
                     $variants =  explode('/', $option);
-             
+                    
+                    //find in variants table rows where option1 or option2 of
+                    //associated variants conatains one of the values in the query
+                    //for the current option
                     $query->select()->from('variants')
                     ->whereColumn('variants.product_id', 'products.id')->whereExists(function($query) use($option, $variants) { 
                         $query->whereIn('option1', $variants)
@@ -74,7 +72,7 @@ class Product extends Model
         return $this->belongsToMany(Option::class, 'product_specs')->withPivot('option_idx');
     }
 
-    public function owner() {
+    public function interested_users() {
         return $this->belongsToMany(User::class, 'wishlists');
     }
 
@@ -84,8 +82,13 @@ class Product extends Model
     }
 
     public function inStock($variants) {
-        echo $variants;
-        echo "DONEEEE";
+        foreach($variants as $variant) {
+            if ($variant->stock > 0) {
+                return True;
+            }
+        }
+
+        return False;
     }
 
 }
