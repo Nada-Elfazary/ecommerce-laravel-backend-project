@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Validation\Rules;
 
 class AuthController extends Controller
 {
@@ -15,9 +17,9 @@ class AuthController extends Controller
       
         try{
             $validate = Validator::make($request->all(), [
-                'name' => 'required|max:255',
-                'email' => 'required|email|max:50|unique:users,email',
-                'password' => 'required|min:7|max:50',
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+                'password' => ['required', Rules\Password::defaults()],
             ]);
 
             if($validate->fails()) {
@@ -36,8 +38,9 @@ class AuthController extends Controller
                 'password' => Hash::make($request->password)
             ]);
 
-            $this->logIn($request); //right?
-
+            event(new Registered($user));
+            $this->logIn($request); 
+            
             return response()->json([
                 'status' => true,
                 'message' => 'User created successfully',

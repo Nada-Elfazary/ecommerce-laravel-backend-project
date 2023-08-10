@@ -33,8 +33,8 @@ class UserController extends Controller
     }
 
     public function update(Request $request) {
-        $user = Auth::user(); //hardcoded for now, later Auth::user()
-        //echo $request;
+        $user = Auth::user();
+        
         if($request->name == null){
             echo 'name null';
             $request['name'] =  $user->name;
