@@ -10,13 +10,15 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function creator() {
         return $this->belongsTo(User::class);
     }
 
     public function variants() {
-        return $this->belongsToMany(Variant::class, 'order_contents', 'variant', 'order')
-        ->as('content');
+        return $this->belongsToMany(Variant::class, 'order_contents')->as('content')
+        ->withPivot('quantity');
     }
 
 }

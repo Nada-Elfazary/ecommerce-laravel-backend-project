@@ -19,7 +19,7 @@ class OrderFactory extends Factory
     {
         return [
             'sub_total' => '63',
-            'Total price' => '120',
+            'total_price' => '120',
             'payment_method'=> 'card',
         ];
     }

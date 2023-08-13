@@ -58,7 +58,7 @@ class Variant extends Model
 
     public function orders() {
         return $this->belongsToMany(Order::class, 'order_contents')
-        ->as('content');
+        ->as('content')->withPivot('quantity');
     }
 
     public function inStock($stock) {

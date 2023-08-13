@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->integer('sub_total');
             $table->foreignId('user_id');
-            $table->integer('Total price');
+            $table->integer('total_price');
             $table->string('payment_method');
-            $table->string('Status')->default('placed');
+            $table->string('status')->default('placed');
             $table->timestamps();
         });
     }

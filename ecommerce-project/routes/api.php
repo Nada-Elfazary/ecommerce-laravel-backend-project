@@ -29,12 +29,15 @@ Auth::routes([
 
 Route::post('/signup', [AuthController::class, 'signUp'])->middleware('guest');
 
-Route::post('/login', [AuthController::class, 'logIn'])->middleware('guest');
+Route::middleware(['guest'])->post('/login', [AuthController::class, 'logIn']);
 
 Route::middleware(['auth:sanctum'])->post('/logout', [AuthController::class, 'logOut']);
 
 Route::middleware(['auth:sanctum'])->group(function() {
-    Route::get('/orders', [OrderController::class, 'index'])->middleware('verified');
+    Route::get('/orders', [OrderController::class, 'index']); 
+    Route::post('/orders/add', [OrderController::class, 'create']);
+    Route::patch('/update-order/{order}', [OrderController::class, 'update']);
+    Route::get('/order/show/{order}', [OrderController::class, 'show']);
 
     Route::get('/profile', [UserController::class, 'show']);
     Route::patch('/profile', [UserController::class, 'update']);
