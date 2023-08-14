@@ -18,15 +18,15 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
     return ['Laravel' => app()->version()];
-});
+})->name('home');
 
 Auth::routes([
     'verify' => true,
 ]);
 
 
-
 require __DIR__.'/auth.php';
+
 
 
 

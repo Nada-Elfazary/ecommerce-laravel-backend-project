@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('sub_total');
+            $table->float('sub_total');
             $table->foreignId('user_id');
-            $table->integer('total_price');
+            $table->float('total_price');
             $table->string('payment_method');
             $table->string('status')->default('placed');
             $table->timestamps();

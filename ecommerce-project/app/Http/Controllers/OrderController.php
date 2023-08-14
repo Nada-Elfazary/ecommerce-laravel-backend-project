@@ -32,23 +32,22 @@ class OrderController extends Controller
     public function create() {
         $user = Auth::user();
         $attributes = $this->validateOrder();
-        $variant_qty = array_pop($attributes);
-        $variant_ids = array_pop($attributes);
+        $items = array_pop($attributes);
 
-        $variant_ids = explode(',', $variant_ids);
-        $variant_qty = explode(',', $variant_qty);
+      //  $variant_ids = explode(',', $variant_ids);
+      // $variant_qty = explode(',', $variant_qty);
 
         $order = Order::create(array_merge($attributes, [ 
             'user_id' => $user->id,
         ]));
-
-        $i = 0;
-        foreach($variant_ids as $id) {
-            $order->variants()->attach($id,[
-               'quantity' => $variant_qty[$i],
+        
+        foreach($items as $key=>$value) {
+            $curr_price = Variant::find($key)->get()->first()->price;
+            $order->variants()->attach($key,[
+               'quantity' => $value,
+               'unit_price' => $curr_price,
             ]);
-            Variant::find($id)->decrement('stock', $variant_qty[$i]);
-            $i++;
+            Variant::find($key)->decrement('stock', $value);
         }
 
         return response()->json([
@@ -78,8 +77,7 @@ class OrderController extends Controller
             'sub_total' => $order->exists ? ['numeric'] : ['required', 'numeric'],
             'total_price' => $order->exists ? ['numeric'] : ['required', 'numeric'],
             'payment_method' => $order->exists ? '' : ['required'],
-            'variants_id' => $order->exists ? '' : ['required'],
-            'variants_qty' => $order->exists ? '' : ['required'],
+            'items' => $order->exists ? '' : ['required'],
         ]);
 
     }

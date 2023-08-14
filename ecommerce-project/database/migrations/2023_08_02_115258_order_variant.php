@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('variant_id');
             $table->primary(['order_id', 'variant_id']);
             $table->integer('quantity');
+            $table->float('unit_price');
         });
     }
 

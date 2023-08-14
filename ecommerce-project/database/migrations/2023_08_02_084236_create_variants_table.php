@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('variants', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('skuid')->unique(); //skuid
+            $table->string('skuid')->unique(); 
             $table->foreignID('product_id');
             $table->string('option1');
             $table->string('option2');
-            $table->double('price');
+            $table->float('price');
             $table->integer('stock');
             $table->timestamps();
         });

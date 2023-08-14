@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
+use App\Models\Product;
+use App\Events\OutOfStock;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +50,10 @@ Route::middleware(['auth:sanctum'])->group(function() {
 });
 
 Route::get('/products', [ProductController::class, 'index']);
+
+
+//for testing:
+Route::post('/product-out-of-stock/{product}', function(Product $product) {
+    event(new OutOfStock($product));
+});
+
