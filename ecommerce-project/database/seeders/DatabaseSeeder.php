@@ -35,16 +35,23 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        $options = Option::factory(2)->create();
+        $option1 = Option::factory()->create([
+            'name' => 'size',
+            'values' => ['small', 'medium', 'large'],
+        ]);
+        $option2 = Option::factory()->create([
+            'name' => 'color',
+            'values' => ['white', 'blue', 'orange'],
+        ]);
         $product = Product::factory()->create([
             'average_rating'=>5,
         ]);
        
-        $product->options()->attach($options[0]->id,[
+        $product->options()->attach($option1->id,[
             'option_idx' => 0,
         ]);
 
-        $product->options()->attach($options[1]->id,[
+        $product->options()->attach($option2->id,[
             'option_idx' => 1,
         ]);
         
@@ -60,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'short',
             'product_id' => $product->id,
             'skuid' => 'uiuyf8589yw',
-            'option1' => 'casual',
+            'option1' => 'small',
             'option2' => 'orange',
             'price' => 30,
 
@@ -70,7 +77,7 @@ class DatabaseSeeder extends Seeder
             'title' => 'short',
             'skuid' => 'uiuyf859yw',
             'product_id' => $product2->id,
-            'option1' => 'formal',
+            'option1' => 'medium',
             'option2' => 'white',
             'price' => 70,
 
@@ -80,8 +87,8 @@ class DatabaseSeeder extends Seeder
             'title' => 'short',
             'skuid' => 'uiuyf759yw',
             'product_id' => $product2->id,
-            'option1' => 'formal',
-            'option2' => 'white',
+            'option1' => 'large',
+            'option2' => 'blue',
             'price' => 20,
 
         ]);
@@ -93,8 +100,8 @@ class DatabaseSeeder extends Seeder
             'title' => 'short',
             'product_id' => 5,
             'skuid' => 'uiuyf899yiw',
-            'option1' => 'casual',
-            'option2' => 'medium',
+            'option1' => 'medium',
+            'option2' => 'red',
 
         ]);
 

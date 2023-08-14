@@ -19,8 +19,8 @@ class VariantFactory extends Factory
         return [
             'title' => fake()->sentence(),
             //'skuid'=> fake()->,
-            'option1'=>'red',
-            'option2'=>'small',
+            'option1'=>'small',
+            'option2'=>'blue',
             'stock'=> 10,
             'price'=>60,
         ];

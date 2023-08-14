@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Variant;
+use App\Http\Resources\OrdersResource;
 use App\Http\Resources\OrderResource;
 use DB;
 
@@ -17,7 +18,7 @@ class OrderController extends Controller
 
         $orders = $user->orders;
         
-        return OrderResource::collection($orders);
+        return OrdersResource::collection($orders);
        /*return response()->json([
             'orders' => $orders
         ]);*/

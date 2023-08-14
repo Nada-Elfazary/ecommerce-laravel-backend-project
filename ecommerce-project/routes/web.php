@@ -26,7 +26,7 @@ Auth::routes([
 
 
 
-
-
-
 require __DIR__.'/auth.php';
+
+
+

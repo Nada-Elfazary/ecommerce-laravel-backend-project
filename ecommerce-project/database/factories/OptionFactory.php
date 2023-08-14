@@ -20,7 +20,7 @@ class OptionFactory extends Factory
     {
         return [
             'name' => fake()->word(),
-            'values'=> [1, 2, 3],
+            'values'=> ['', '', ''],
         ];
     }
 }

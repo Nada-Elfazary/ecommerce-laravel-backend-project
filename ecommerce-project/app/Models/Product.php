@@ -20,28 +20,21 @@ class Product extends Model
 
     public function scopeMaxPrice(Builder $query, $price): Builder
     {
-        return $query->selectRaw('id, title,
-        average_rating')->whereExists(function ($query) use($price) {
-            $query->selectRaw(DB::raw(1))
-                ->from('variants')
-                ->whereColumn('variants.product_id', 'products.id')
-                ->where('price', '<=', $price);
+        return $query->whereHas('variants', function ($query) use($price) {
+            $query->where('price', '<=', $price);
         });
-
     }
 
     public function scopeAverageRating(Builder $query, ...$ratings): Builder
     {
-        return $query->selectRaw('id, title, 
-        average_rating')->whereIn('average_rating', $ratings);
+        return $query->whereIn('average_rating', $ratings);
     }   
 
     // function takes in options (array with each element
     //representing as different type of option)
     public function scopeOptions(Builder $query, ...$options) {
 
-        $query->selectRaw('id, title, 
-            average_rating')->whereExists(function($query) use($options) {
+        $query->whereExists(function($query) use($options) {
                 foreach($options as $option) {
 
                     //variants: the different instances per option 
@@ -77,7 +70,7 @@ class Product extends Model
     }
 
     public function defaultVariant($product_id) {
-        $default_variant = Variant::where('product_id','=', $product_id)->orderBy('price', 'asc')->first();
+        $default_variant = $this->variants()->where('product_id','=', $product_id)->orderBy('price', 'asc')->first();
         return new VariantResource($default_variant);
     }
 
